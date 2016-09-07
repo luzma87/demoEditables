@@ -100,6 +100,28 @@
                     </tr>
                     <tr>
                         <th>
+                            <label for="width">
+                                Tamaño
+                                <small>ancho</small>
+                            </label>
+                        </th>
+                        <td>
+                            <input type="text" id="width" class="form-control js-toggle-style">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="height">
+                                Tamaño
+                                <small>alto</small>
+                            </label>
+                        </th>
+                        <td>
+                            <input type="text" id="height" class="form-control js-toggle-style">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             <label for="border-style">
                                 Borde
                                 <small>estilo</small>
@@ -198,11 +220,25 @@
                         "border-width" : defaultBorderWidth,
                         "border-color" : defaultBorderColor
                     });
-                    $div.attr("contenteditable", true);
+//                    $div.attr("contenteditable", true);
                     setSelected($div);
                     $div.text("Demo text");
                     $div.click(function () {
                         setSelected($(this));
+                    });
+                    $div.resizable({
+                        start : function () {
+                            setSelected($(this));
+                        },
+                        stop  : function (_event, ui) {
+                            var width = ui.size.width + "px";
+                            var height = ui.size.height + "px";
+                            $(this).data({
+                                width  : width,
+                                height : height
+                            });
+                            toggleProperties();
+                        }
                     });
                     $div.draggable({
                         start : function () {
@@ -221,8 +257,8 @@
                     $canvas.append($div);
                     $selectedDiv = $div;
                     toggleProperties();
-                    CKEDITOR.disableAutoInline = true;
-                    CKEDITOR.inline(id);
+//                    CKEDITOR.disableAutoInline = true;
+//                    CKEDITOR.inline(id);
                 });
                 $("select.js-toggle-style").change(function () {
                     var $this = $(this);
@@ -237,7 +273,6 @@
                     var value = $this.val();
                     $selectedDiv.css(property, value);
                     $selectedDiv.data(property, value);
-                    console.log($selectedDiv.data());
                 });
                 function toggleProperties() {
                     if ($selectedDiv != null) {
