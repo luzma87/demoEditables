@@ -1,0 +1,26 @@
+body {
+    min-height: 2000px;
+    padding-top: 70px;
+}
+
+.canvas {
+    height: 800px;
+    background: #f1f1f1;
+    border: solid 1px #d1d1d1;
+    position: relative;
+}
+
+.ui-draggable-handle {
+    cursor: move;
+}
+
+.selected {
+    background: rgba(0, 187, 255, 0.51);
+}
+
+.properties-panel {
+    position: absolute;
+    top: 55px;
+    left: 5px;
+    z-index: 2;
+}

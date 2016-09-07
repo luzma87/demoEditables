@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <link rel="stylesheet" href="resources/vendor/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="resources/vendor/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="resources/vendor/jquery-ui-1.12.0.custom/jquery-ui.min.css">
+        <link rel="stylesheet" href="resources/vendor/jquery-ui-1.12.0.custom/jquery-ui.structure.min.css">
+        <link rel="stylesheet" href="resources/vendor/jquery-ui-1.12.0.custom/jquery-ui.theme.min.css">
+        <link rel="stylesheet" href="resources/vendor/font-awesome-4.6.3/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="resources/custom/main.css">
+
+        <script src="resources/vendor/jquery-ui-1.12.0.custom/external/jquery/jquery.js"></script>
+        <script src="resources/vendor/jquery-ui-1.12.0.custom/jquery-ui.min.js"></script>
+        <script src="resources/vendor/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+        <script src="resources/vendor/ckeditor/ckeditor.js"></script>
+
+        <title>Demo editables</title>
+    </head>
+    <body>
+
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Demo editables</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#" id="add-text">
+                                <i class="fa fa-font"></i>
+                                Insertar Texto
+                            </a>
+                        </li>
+                        <!--<li><a href="#">About</a></li>-->
+                        <!--<li><a href="#">Contact</a></li>-->
+                        <!--<li class="dropdown">-->
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"-->
+                        <!--aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>-->
+                        <!--<ul class="dropdown-menu">-->
+                        <!--<li><a href="#">Action</a></li>-->
+                        <!--<li><a href="#">Another action</a></li>-->
+                        <!--<li><a href="#">Something else here</a></li>-->
+                        <!--<li role="separator" class="divider"></li>-->
+                        <!--<li class="dropdown-header">Nav header</li>-->
+                        <!--<li><a href="#">Separated link</a></li>-->
+                        <!--<li><a href="#">One more separated link</a></li>-->
+                        <!--</ul>-->
+                        <!--</li>-->
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+
+        <div class="panel panel-info properties-panel hide" id="properties-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="fa fa-cogs"></i>
+                    Propiedades
+                </h3>
+            </div>
+            <form>
+                <table class="table">
+                    <tr class="active">
+                        <th class="text-center">Propiedad</th>
+                        <th class="text-center">Valor</th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="top">
+                                Posición
+                                <small>top</small>
+                            </label>
+                        </th>
+                        <td>
+                            <input type="text" id="top" class="form-control js-toggle-style"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="left">
+                                Posición
+                                <small>left</small>
+                            </label>
+                        </th>
+                        <td>
+                            <input type="text" id="left" class="form-control js-toggle-style">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="border-style">
+                                Borde
+                                <small>estilo</small>
+                            </label>
+                        </th>
+                        <td>
+                            <select id="border-style" class="form-control js-toggle-style">
+                                <option value="none">None</option>
+                                <option value="solid">Solid</option>
+                                <option value="dotted">Dotted</option>
+                                <option value="dashed">Dashed</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="border-width">
+                                Borde
+                                <small>ancho</small>
+                            </label>
+                        </th>
+                        <td>
+                            <select id="border-width" class="form-control js-toggle-style">
+                                <option value="1px">1px</option>
+                                <option value="2px">2px</option>
+                                <option value="5px">5px</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="border-color">
+                                Borde
+                                <small>color</small>
+                            </label>
+                        </th>
+                        <td>
+                            <input type="text" id="border-color" class="form-control js-toggle-style">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div class="container canvas" id="canvas">
+
+
+        </div> <!-- /container -->
+
+        <script type="text/javascript">
+            $(function () {
+                var defaultTop = "100px";
+                var defaultLeft = "250px";
+                var defaultWidth = "150px";
+                var defaultHeight = "50px";
+                var defaultBorderStyle = "dotted";
+                var defaultBorderWidth = "1px";
+                var defaultBorderColor = "#00BBFF";
+
+                var $canvas = $("#canvas");
+
+                var count = 0;
+
+                var $selectedDiv = null;
+
+                $("#properties-panel").draggable({
+                    handle : ".panel-heading"
+                });
+
+                function setSelected($div) {
+                    $(".selected").removeClass("selected");
+                    $div.addClass("selected");
+                }
+
+                $("#add-text").click(function () {
+                    var $div = $("<div>");
+                    var id = "text-" + count;
+                    count++;
+                    $div.attr("id", id);
+                    $div.css({
+                        position    : "absolute",
+                        top         : defaultTop,
+                        left        : defaultLeft,
+                        width       : defaultWidth,
+                        height      : defaultHeight,
+                        borderStyle : defaultBorderStyle,
+                        borderWidth : defaultBorderWidth,
+                        borderColor : defaultBorderColor
+                    });
+                    $div.data({
+                        "top"          : defaultTop,
+                        "left"         : defaultLeft,
+                        "width"        : defaultWidth,
+                        "height"       : defaultHeight,
+                        "border-style" : defaultBorderStyle,
+                        "border-width" : defaultBorderWidth,
+                        "border-color" : defaultBorderColor
+                    });
+                    $div.attr("contenteditable", true);
+                    setSelected($div);
+                    $div.text("Demo text");
+                    $div.click(function () {
+                        setSelected($(this));
+                    });
+                    $div.draggable({
+                        start : function () {
+                            setSelected($(this));
+                        },
+                        stop  : function (_event, ui) {
+                            var top = ui.position.top + "px";
+                            var left = ui.position.left + "px";
+                            $(this).data({
+                                top  : top,
+                                left : left
+                            });
+                            toggleProperties();
+                        }
+                    });
+                    $canvas.append($div);
+                    $selectedDiv = $div;
+                    toggleProperties();
+                    CKEDITOR.disableAutoInline = true;
+                    CKEDITOR.inline(id);
+                });
+                $("select.js-toggle-style").change(function () {
+                    var $this = $(this);
+                    var property = $this.attr("id");
+                    var value = $this.val();
+                    $selectedDiv.css(property, value);
+                    $selectedDiv.data(property, value);
+                });
+                $("input.js-toggle-style").blur(function () {
+                    var $this = $(this);
+                    var property = $this.attr("id");
+                    var value = $this.val();
+                    $selectedDiv.css(property, value);
+                    $selectedDiv.data(property, value);
+                    console.log($selectedDiv.data());
+                });
+                function toggleProperties() {
+                    if ($selectedDiv != null) {
+                        $("#properties-panel").removeClass("hide");
+                        $.each($selectedDiv.data(), function (key, value) {
+                            $("#" + key).val(value);
+                        });
+                    } else {
+                        $("#properties-panel").addClass("hide");
+                    }
+                }
+            });
+        </script>
+
+    </body>
+</html>
