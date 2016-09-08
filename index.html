@@ -17,6 +17,7 @@
         <script src="resources/vendor/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
         <script src="resources/vendor/ckeditor/ckeditor.js"></script>
+        <script src="resources/vendor/ckeditor/adapters/jquery.js"></script>
 
         <title>Demo editables</title>
     </head>
@@ -68,6 +69,9 @@
                 <h3 class="panel-title">
                     <i class="fa fa-cogs"></i>
                     Propiedades
+                    <a href="#" id="close-properties">
+                        <i class="fa fa-close pull-right"></i>
+                    </a>
                 </h3>
             </div>
             <form>
@@ -168,124 +172,34 @@
 
         <div class="container canvas" id="canvas">
 
-
         </div> <!-- /container -->
 
-        <script type="text/javascript">
-            $(function () {
-                var defaultTop = "100px";
-                var defaultLeft = "250px";
-                var defaultWidth = "150px";
-                var defaultHeight = "50px";
-                var defaultBorderStyle = "dotted";
-                var defaultBorderWidth = "1px";
-                var defaultBorderColor = "#00BBFF";
-
-                var $canvas = $("#canvas");
-
-                var count = 0;
-
-                var $selectedDiv = null;
-
-                $("#properties-panel").draggable({
-                    handle : ".panel-heading"
-                });
-
-                function setSelected($div) {
-                    $(".selected").removeClass("selected");
-                    $div.addClass("selected");
-                }
-
-                $("#add-text").click(function () {
-                    var $div = $("<div>");
-                    var id = "text-" + count;
-                    count++;
-                    $div.attr("id", id);
-                    $div.css({
-                        position    : "absolute",
-                        top         : defaultTop,
-                        left        : defaultLeft,
-                        width       : defaultWidth,
-                        height      : defaultHeight,
-                        borderStyle : defaultBorderStyle,
-                        borderWidth : defaultBorderWidth,
-                        borderColor : defaultBorderColor
-                    });
-                    $div.data({
-                        "top"          : defaultTop,
-                        "left"         : defaultLeft,
-                        "width"        : defaultWidth,
-                        "height"       : defaultHeight,
-                        "border-style" : defaultBorderStyle,
-                        "border-width" : defaultBorderWidth,
-                        "border-color" : defaultBorderColor
-                    });
-//                    $div.attr("contenteditable", true);
-                    setSelected($div);
-                    $div.text("Demo text");
-                    $div.click(function () {
-                        setSelected($(this));
-                    });
-                    $div.resizable({
-                        start : function () {
-                            setSelected($(this));
-                        },
-                        stop  : function (_event, ui) {
-                            var width = ui.size.width + "px";
-                            var height = ui.size.height + "px";
-                            $(this).data({
-                                width  : width,
-                                height : height
-                            });
-                            toggleProperties();
-                        }
-                    });
-                    $div.draggable({
-                        start : function () {
-                            setSelected($(this));
-                        },
-                        stop  : function (_event, ui) {
-                            var top = ui.position.top + "px";
-                            var left = ui.position.left + "px";
-                            $(this).data({
-                                top  : top,
-                                left : left
-                            });
-                            toggleProperties();
-                        }
-                    });
-                    $canvas.append($div);
-                    $selectedDiv = $div;
-                    toggleProperties();
-//                    CKEDITOR.disableAutoInline = true;
-//                    CKEDITOR.inline(id);
-                });
-                $("select.js-toggle-style").change(function () {
-                    var $this = $(this);
-                    var property = $this.attr("id");
-                    var value = $this.val();
-                    $selectedDiv.css(property, value);
-                    $selectedDiv.data(property, value);
-                });
-                $("input.js-toggle-style").blur(function () {
-                    var $this = $(this);
-                    var property = $this.attr("id");
-                    var value = $this.val();
-                    $selectedDiv.css(property, value);
-                    $selectedDiv.data(property, value);
-                });
-                function toggleProperties() {
-                    if ($selectedDiv != null) {
-                        $("#properties-panel").removeClass("hide");
-                        $.each($selectedDiv.data(), function (key, value) {
-                            $("#" + key).val(value);
-                        });
-                    } else {
-                        $("#properties-panel").addClass("hide");
-                    }
-                }
-            });
-        </script>
-
+        <div class="modal fade" id="text-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">
+                            <label id="text-modal-title" for="edit-text-area">
+                                Editar texto
+                            </label>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="edit-text-area" class="form-control"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                        </button>
+                        <button type="button" class="btn btn-success" id="text-modal-save">
+                            <i class="fa fa-floppy-o"></i>
+                            Save changes
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <script src="resources/custom/main.js"></script>
     </body>
 </html>

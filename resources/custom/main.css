@@ -8,14 +8,37 @@ body {
     background: #f1f1f1;
     border: solid 1px #d1d1d1;
     position: relative;
+    padding: 0;
 }
 
 .ui-draggable-handle {
     cursor: move;
 }
 
+.toolbar {
+    background: ghostwhite;
+    border: 1px solid #ddd;
+    width: calc(100% + 2px);
+    height: 24px;
+    position: absolute;
+    top: -25px;
+    left: -1px;
+    display: none;
+    padding: 0 5px;
+}
+
+.toolbar .item {
+    float: right;
+    margin-left: 5px;
+}
+
 .selected {
-    background: rgba(0, 187, 255, 0.51);
+    border: dotted 1px #ff49c1;
+    background: rgba(0, 187, 255, 0.40);
+}
+
+.selected .toolbar {
+    display: block;
 }
 
 .properties-panel {
